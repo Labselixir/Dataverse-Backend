@@ -3,12 +3,12 @@ import { IChatHistory } from '../types';
 
 const chatHistorySchema = new Schema<IChatHistory>({
   projectId: {
-    type: Schema.Types.ObjectId,
+    type: 'ObjectId' as any,
     ref: 'Project',
     required: true
   },
   userId: {
-    type: Schema.Types.ObjectId,
+    type: 'ObjectId' as any,
     ref: 'User',
     required: true
   },
