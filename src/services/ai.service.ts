@@ -1,8 +1,9 @@
 import Groq from 'groq-sdk';
-import { ChatCompletionMessageParam } from 'groq-sdk/resources/chat/completions';
 import { logger } from '../utils/logger';
 import { ValidationError } from '../utils/errors';
-import { QueryGeneratorService, QueryIntent } from './query-generator.service';
+import { QueryGeneratorService } from './query-generator.service';
+
+type ChatCompletionMessageParam = any;
 import { MongoDBService } from './mongodb.service';
 import { DataFormatterService } from './data-formatter.service';
 
