@@ -9,7 +9,7 @@ const organizationSchema = new Schema<IOrganization>({
     maxlength: [100, 'Organization name cannot exceed 100 characters']
   },
   owner: {
-    type: Schema.Types.ObjectId,
+    type: 'ObjectId' as any,
     ref: 'User',
     required: true
   },
