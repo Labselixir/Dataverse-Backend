@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: dataverse-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: dataverse
+    volumes:
+      - mongodb_data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - dataverse-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: dataverse-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - dataverse-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dataverse-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      NODE_ENV: development
+      MONGODB_URI: mongodb://admin:admin123@mongodb:27017/dataverse?authSource=admin
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: your_super_secure_jwt_secret_key_change_this_in_production
+      JWT_REFRESH_SECRET: your_super_secure_refresh_secret_key_change_this_in_production
+      ENCRYPTION_KEY: your_32_character_encryption_key_change_this
+      GROQ_API_KEY: ${GROQ_API_KEY}
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - dataverse-network
+    volumes:
+      - ./src:/app/src
+      - ./logs:/app/logs
+
+volumes:
+  mongodb_data:
+  redis_data:
+
+networks:
+  dataverse-network:
+    driver: bridge
