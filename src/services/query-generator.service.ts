@@ -1,6 +1,3 @@
-import { logger } from '../utils/logger';
-import { ValidationError } from '../utils/errors';
-
 export interface QueryIntent {
   type: 'count' | 'find' | 'aggregate' | 'schema' | 'relationship' | 'general';
   collection?: string;
