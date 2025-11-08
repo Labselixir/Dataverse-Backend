@@ -75,8 +75,8 @@ userSchema.methods.generateAccessToken = function(): string {
       email: this.email,
       organizationId: this.organizations[0] || null
     },
-    process.env.JWT_SECRET!,
-    { expiresIn: CONSTANTS.JWT.ACCESS_TOKEN_EXPIRE }
+    process.env.JWT_SECRET! as string,
+    { expiresIn: CONSTANTS.JWT.ACCESS_TOKEN_EXPIRE } as any
   );
 };
 
@@ -84,8 +84,8 @@ userSchema.methods.generateAccessToken = function(): string {
 userSchema.methods.generateRefreshToken = function(): string {
   return jwt.sign(
     { userId: this._id },
-    process.env.JWT_REFRESH_SECRET!,
-    { expiresIn: CONSTANTS.JWT.REFRESH_TOKEN_EXPIRE }
+    process.env.JWT_REFRESH_SECRET! as string,
+    { expiresIn: CONSTANTS.JWT.REFRESH_TOKEN_EXPIRE } as any
   );
 };
 
